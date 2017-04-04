@@ -1,14 +1,39 @@
 from bs4 import BeautifulSoup
 import urllib.request
 
-##メンテするとき
-##①urlの変数を手動で買える
-##②getNumberメソッドのENとJPを手動で買える
-
 print("-----------------")
+## input 検索単語名
+print("input indeed what value.")
+print("(ex) python / java / javascript / ruby / C# / php / perl / html / css / swift / objective-c")
+indeedWhat=input(":")
+
+## input 検索時の国
+print("input indeed where number.")
+print("1 : japan\n2 : canada\n3 : United States\n4 : Australia")
+indeedWhere=input(":")
+
+## 入力値からどのURLを使用するか
+if indeedWhere == "1": # japan
+    url="https://jp.indeed.com/%E6%B1%82%E4%BA%BA?q="+indeedWhat+"&l=japan"
+    LANG="JP"
+elif indeedWhere == "2":
+    url = "https://www.indeed.ca/jobs?q=" + indeedWhat + "&l=canada"
+    LANG = "EN"
+elif indeedWhere == "3":
+    url = "https://www.indeed.ca/jobs?q=" + indeedWhat + "&l=United+States"
+    LANG = "EN"
+elif indeedWhere== "4": #"Australia"
+    url = "https://au.indeed.com/jobs?q="+indeedWhat+"&l=Australia"
+    LANG = "EN"
+else:
+    print ("error")
+    exit()
+print("-----------------")
+
+
 ## varidates
 #url = "https://jp.indeed.com/%E6%B1%82%E4%BA%BA?q=python&l=japan"     #日本
-url = "https://www.indeed.ca/jobs?q=python&l=canada"                           #canada
+#url = "https://www.indeed.ca/jobs?q=python&l=canada"                           #canada
 #url = "https://www.indeed.com/jobs?q=python&l=United+States"                   # usa
 #url = "https://au.indeed.com/jobs?q=python&l=Australia"                        # australia
 
@@ -20,12 +45,10 @@ soup = BeautifulSoup(html,'html.parser')
 
 ## 掲載数
 def getNumber():
-    ## retried
-    # number
     target = "searchCount"
     contextTag=soup.find(id=target)
     context=str(contextTag)
-    print("総合求人数："+getNumberCount(context,"EN"))
+    print("総合求人数："+getNumberCount(context,LANG)+"件")
     print("-----------------")
 
 ## 給与額面
