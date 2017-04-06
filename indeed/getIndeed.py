@@ -1,3 +1,4 @@
+##
 from bs4 import BeautifulSoup
 import urllib.request
 
@@ -20,7 +21,7 @@ elif indeedWhere == "2":
     url = "https://www.indeed.ca/jobs?q=" + indeedWhat + "&l=canada"
     LANG = "EN"
 elif indeedWhere == "3":
-    url = "https://www.indeed.ca/jobs?q=" + indeedWhat + "&l=United+States"
+    url = "https://www.indeed.com/jobs?q=" + indeedWhat + "&l=United+States"
     LANG = "EN"
 elif indeedWhere== "4": #"Australia"
     url = "https://au.indeed.com/jobs?q="+indeedWhat+"&l=Australia"
@@ -48,20 +49,31 @@ def getNumber():
     target = "searchCount"
     contextTag=soup.find(id=target)
     context=str(contextTag)
-    print("総合求人数："+getNumberCount(context,LANG)+"件")
+    peopleSum=getNumberCount(context,LANG)
+    print("総合求人数："+peopleSum+"件")
     print("-----------------")
+    return peopleSum
 
 ## 給与額面
 def getSalary():
+    ##
+    result1=[]
+    result2=[]
+
+    ## 取得箇所
     target = "div#SALARY_rbo > ul > li > a"
     salaryList = soup.select(target)
     peopleSum=0
+
     for m in salaryList:
         a=getSalaryCont(m.get("title"))
         print("金額　：" + a[0]) #salaryVal
         print("求人数：" + a[1]) #peopleVal
         print("-----")
+        result1.append(a[0]) #金額
+        result2.append(a[1]) #求人数
 
+    return result1,result2
 
 def getSalaryCont(a):
     salaryVal=""             # 給与金額を取得。空っぽで宣言
@@ -116,10 +128,18 @@ def getNumberCount(context,LANG):
 #print(getNumberCount("""<div id="searchCount">求人検索結果 4,878 件中 1 - 10</div>""",LANG))
 #print(getNumberCount("""<div id="searchCount">Jobs 1 to 20 of 3,742</div>""",LANG))
 
+##変数宣言
+result1=[]
+result2=[]
 
 ##実行
-getNumber()
-getSalary()
+peopleSum=getNumber()
+result1,result2=(getSalary())
+
+
+print(peopleSum)
+print(result1)
+print(result2)
 
 ##エンドまでの確認用
 print("end...thanks")
